@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FactletComponent } from './factlet/factlet.component';
 import { FactletListComponent } from './factlet-list/factlet-list.component';
+import { FactletSearchComponent } from './factlet-search/factlet-search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FactletComponent,
-    FactletListComponent
+    FactletListComponent,
+    FactletSearchComponent
   ],
   imports: [
     BrowserModule,

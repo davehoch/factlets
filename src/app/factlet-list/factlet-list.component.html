@@ -1,5 +1,11 @@
+<!-- <input [(ngModel)]="listFilter" placeholder="search"> -->
+<!-- <input type="text" #box (keyup.enter)="setFilter(box.value); box.value=''" placeholder="search"> -->
+<input type="text" #box (keyup)="listFilter = box.value" placeholder="search">
+
+<button (click)="listFilter = ''; box.value = ''">clear</button>
+
 <ul>
-  <li *ngFor="let factlet of factlets">
-    factlet.contentMarkdown
+  <li *ngFor="let factlet of displayedFactlets">
+    {{factlet.contentMarkdown}}
   </li>
 </ul>
