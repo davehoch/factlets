@@ -3,6 +3,12 @@
 <input type="text" #box (keyup)="listFilter = box.value" placeholder="search">
 
 <button (click)="listFilter = ''; box.value = ''">clear</button>
+<div>
+  <input #contentInput value="getDateStr();" />
+  <button (click)="addFactlet(contentInput.value); contentInput.value='getDateStr();'">
+    add
+  </button>
+</div>
 
 <ul>
   <li *ngFor="let factlet of displayedFactlets">

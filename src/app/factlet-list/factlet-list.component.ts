@@ -20,12 +20,23 @@ export class FactletListComponent implements OnInit {
     this.getFactlets();
   }
 
-  getFactlets() {
+  getFactlets(): void {
     this.factletService.getFactlets().subscribe(factlets => {
       this.factlets = factlets;
-      this.displayedFactlets = this.calcDisplayedFactlets(factlets, this.searchFilter);
+      this.updateFactlets();
     } // , error => );
     );
+  }
+
+  getDateStr(): string {
+    return (new Date()).toISOString();
+  }
+
+  addFactlet(contentMarkdown: string): void {
+    this.factletService.addFactlet(contentMarkdown).subscribe(factlet => {
+      this.factlets.push(factlet);
+      this.updateFactlets();
+    });
   }
 
   get listFilter(): string {
@@ -34,6 +45,10 @@ export class FactletListComponent implements OnInit {
 
   set listFilter(value: string) {
     this.searchFilter = value;
+    this.updateFactlets();
+  }
+
+  updateFactlets(): void {
     this.displayedFactlets = this.calcDisplayedFactlets(this.factlets, this.searchFilter);
   }
 
@@ -41,10 +56,16 @@ export class FactletListComponent implements OnInit {
     return this.performSort(this.performFilter(factlets, searchString));
   }
 
-  performFilter(factlets: Factlet[], filterBy: string): Factlet[] {
-    filterBy = filterBy.toLocaleLowerCase();
-    return factlets.filter((factlet: Factlet) =>
-      factlet.contentMarkdown.toLocaleLowerCase().indexOf(filterBy) !== -1);
+  performFilter(factlets: Factlet[], searchFilter: string): Factlet[] {
+    // split into separate tokens
+    // see if all the tokens are in the string
+    const tokens = searchFilter.toLocaleLowerCase().split(' ');
+
+    return factlets.filter((factlet: Factlet) => {
+      const target = factlet.contentMarkdown.toLowerCase();
+      return tokens.every(token => target.indexOf(token) !== -1);
+    });
+    // factlet.contentMarkdown.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
   // This needs to be called on data load, whenever a factlet is added or modified

@@ -7,6 +7,7 @@ const factlets: Factlet[] = [
   { id: 2, contentMarkdown: '2017-01-01 note 3 ((dave)) ((rebekah))' },
   { id: 3, contentMarkdown: '2016-01-01 note 2 ((rebekah)) ((rent))' },
 ];
+let nextIdNum = 4;
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +18,9 @@ export class FactletService {
 
   getFactlets(): Observable<Factlet[]> {
     return of(factlets);
+  }
+
+  addFactlet(contentMarkdown: string): Observable<Factlet> {
+    return of({ id: nextIdNum++, contentMarkdown: contentMarkdown });
   }
 }
