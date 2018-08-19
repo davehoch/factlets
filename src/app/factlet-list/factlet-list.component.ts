@@ -35,7 +35,6 @@ export class FactletListComponent implements OnInit {
   ngOnInit() {
     this.searchFilter = '';
     this.getFactlets();
-    // (<HTMLInputElement>document.getElementById('newInput')).value = this.getDateStr();
   }
 
   getFactlets(): void {

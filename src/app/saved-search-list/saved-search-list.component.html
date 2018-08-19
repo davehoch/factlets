@@ -1,0 +1,13 @@
+<form [formGroup]="addSavedSearchForm" (ngSubmit)="addSavedSearch(searchNameControl.value)" [class.error]="!addSavedSearchForm.valid && addSavedSearchForm.touched">
+  <input type="text" [formControl]="searchNameControl">
+  <button type="submit" [disabled]="!searchNameControl.valid">Save Search</button>
+
+  <!-- <ul *ngIf="!addFactletForm.valid">
+    <li *ngIf="newFactletControl.hasError('required')">factlet is required</li>
+    <li *ngIf="newFactletControl.hasError('dateRequired')">factlet must start with yyyy-MM-dd</li>
+  </ul> -->
+</form>
+
+<ul>
+  <li *ngFor="let savedSearch of savedSearches">{{savedSearch.name}}</li>
+</ul>

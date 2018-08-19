@@ -25,9 +25,9 @@
 <table>
   <tr *ngFor="let factlet of displayedFactlets">
     <td>
-      <!-- {{factlet.contentMarkdown}} -->
-      <!-- <input type="text" value='25' *ngIf='selected'> -->
       <app-factlet [factlet]="factlet"></app-factlet>
     </td>
   </tr>
 </table>
+
+<app-saved-search-list></app-saved-search-list>

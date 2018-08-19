@@ -6,12 +6,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FactletComponent } from './factlet/factlet.component';
 import { FactletListComponent } from './factlet-list/factlet-list.component';
+import { SavedSearchComponent } from './saved-search/saved-search.component';
+import { SavedSearchListComponent } from './saved-search-list/saved-search-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FactletComponent,
-    FactletListComponent
+    FactletListComponent,
+    SavedSearchComponent,
+    SavedSearchListComponent
   ],
   imports: [
     BrowserModule,
