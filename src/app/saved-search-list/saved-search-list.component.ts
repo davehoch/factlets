@@ -37,7 +37,6 @@ export class SavedSearchListComponent implements OnInit {
     this.getSavedSearches();
     this.searchValueService.searchInputChanged$.subscribe(value => {
       this.currentSearchString = value;
-      console.log('change:' + this.currentSearchString);
     });
   }
 
@@ -62,6 +61,7 @@ export class SavedSearchListComponent implements OnInit {
     //   return { duplicateName: true };
     // }
 
+    // Make sure there is a search string
     // if (!this.currentSearchString || this.currentSearchString === '') {
     //   return { emptySearchString: true };
     // }
@@ -69,5 +69,9 @@ export class SavedSearchListComponent implements OnInit {
     if (false) {
       return { fake: true };
     }
+  }
+
+  searchClicked(savedSearch: SavedSearch): void {
+    this.searchValueService.savedSearchChanged(savedSearch);
   }
 }

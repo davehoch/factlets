@@ -12,7 +12,6 @@ import { FactletService } from '../factlet.service';
 import { FactletUtilsService } from '../factlet-utils.service';
 import { SearchValueService } from '../search-value.service';
 
-
 @Component({
   selector: 'app-factlet-list',
   templateUrl: './factlet-list.component.html',
@@ -27,18 +26,34 @@ export class FactletListComponent implements OnInit {
   addFactletForm: FormGroup;
   newFactletControl: AbstractControl;
 
+  searchForm: FormGroup;
+  searchInputControl: AbstractControl;
+
   constructor(private factletService: FactletService,
     private fb: FormBuilder,
     private searchValueService: SearchValueService) {
+
     this.addFactletForm = fb.group({
       'newFactletControl': [this.getDateStr(), Validators.compose([Validators.required, this.factletValidator])]
     });
     this.newFactletControl = this.addFactletForm.controls['newFactletControl'];
+
+    this.searchForm = fb.group({
+      'searchInputControl': ['']
+    });
+    this.searchInputControl = this.searchForm.controls['searchInputControl'];
+
+    // This could be a better way to go.
+    // this.searchInputControl.valueChanges.subscribe(value -> search);
   }
 
   ngOnInit() {
     this.searchFilter = '';
     this.getFactlets();
+    this.searchValueService.savedSearchChanged$.subscribe(savedSearch => {
+      this.searchInputControl.setValue(savedSearch.searchString);
+      this.listFilter = savedSearch.searchString;
+    });
   }
 
   getFactlets(): void {

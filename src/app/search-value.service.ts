@@ -14,7 +14,7 @@ export class SearchValueService {
   savedSearchChanged$ = this.savedSearchChangedSource.asObservable();
 
   searchInputChanged(value: string) {
-    console.log('service:' + value);
+    // publish this event so that others can listen to it
     this.searchInputChangedSource.next(value);
   }
 

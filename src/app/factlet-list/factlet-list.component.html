@@ -1,9 +1,10 @@
 <!-- <input [(ngModel)]="listFilter" placeholder="search"> -->
 <!-- <input type="text" #box (keyup.enter)="setFilter(box.value); box.value=''" placeholder="search"> -->
-<div>
-  <input type="text" #box (keyup)="listFilter = box.value" placeholder="search" autofocus>
+<form [formGroup]="searchForm">
+  <!-- <input type="text" #box (keyup)="listFilter = box.value" placeholder="search" autofocus> -->
+  <input type="text" [formControl]="searchInputControl" #box (keyup)="listFilter = box.value" placeholder="search" autofocus>
   <button (click)="listFilter = ''; box.value = ''">x</button>
-</div>
+</form>
 
 <!-- <div>
   <input id='newInput' #contentInput (keyup.enter)="addFactlet(contentInput.value); contentInput.value=getDateStr();" />
@@ -22,12 +23,10 @@
   </ul>
 </form>
 
-<table>
-  <tr *ngFor="let factlet of displayedFactlets">
-    <td>
-      <app-factlet [factlet]="factlet"></app-factlet>
-    </td>
-  </tr>
-</table>
+<ul>
+  <li *ngFor="let factlet of displayedFactlets">
+    <app-factlet [factlet]="factlet"></app-factlet>
+  </li>
+</ul>
 
 <app-saved-search-list></app-saved-search-list>
