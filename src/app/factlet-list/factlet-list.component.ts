@@ -1,6 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Factlet } from '../factlet';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  AbstractControl
+} from '@angular/forms';
+
+import { Factlet } from '../factlet.model';
 import { FactletService } from '../factlet.service';
+import { FactletUtilsService } from '../factlet-utils.service';
 
 @Component({
   selector: 'app-factlet-list',
@@ -13,11 +22,20 @@ export class FactletListComponent implements OnInit {
   displayedFactlets: Factlet[];
   searchFilter: string;
 
-  constructor(private factletService: FactletService) { }
+  addFactletForm: FormGroup;
+  newFactletControl: AbstractControl;
+
+  constructor(private factletService: FactletService, fb: FormBuilder) {
+    this.addFactletForm = fb.group({
+      'newFactletControl': [this.getDateStr(), Validators.compose([Validators.required, this.factletValidator])]
+    });
+    this.newFactletControl = this.addFactletForm.controls['newFactletControl'];
+  }
 
   ngOnInit() {
     this.searchFilter = '';
     this.getFactlets();
+    // (<HTMLInputElement>document.getElementById('newInput')).value = this.getDateStr();
   }
 
   getFactlets(): void {
@@ -29,7 +47,7 @@ export class FactletListComponent implements OnInit {
   }
 
   getDateStr(): string {
-    return (new Date()).toISOString();
+    return (new Date()).toISOString().slice(0, 10) + ' ';
   }
 
   addFactlet(contentMarkdown: string): void {
@@ -37,6 +55,8 @@ export class FactletListComponent implements OnInit {
       this.factlets.push(factlet);
       this.updateFactlets();
     });
+
+    this.newFactletControl.setValue(this.getDateStr());
   }
 
   get listFilter(): string {
@@ -48,41 +68,21 @@ export class FactletListComponent implements OnInit {
     this.updateFactlets();
   }
 
+  // This method should be called to recalculate displayedFactlets whenever there is
+  // a change to the list, or filters
   updateFactlets(): void {
-    this.displayedFactlets = this.calcDisplayedFactlets(this.factlets, this.searchFilter);
+    this.displayedFactlets = FactletUtilsService.calcDisplayedFactlets(this.factlets, this.searchFilter);
   }
 
-  calcDisplayedFactlets(factlets: Factlet[], searchString: string): Factlet[] {
-    return this.performSort(this.performFilter(factlets, searchString));
-  }
+  factletValidator(control: FormControl): { [s: string]: boolean } {
+    // Make sure it starts with a date
+    if (!control.value.match(/^\d{4}-\d{2}-\d{2}/)) {
+      return { dateRequired: true };
+    }
 
-  performFilter(factlets: Factlet[], searchFilter: string): Factlet[] {
-    // split into separate tokens
-    // see if all the tokens are in the string
-    const tokens = searchFilter.toLocaleLowerCase().split(' ');
-
-    return factlets.filter((factlet: Factlet) => {
-      const target = factlet.contentMarkdown.toLowerCase();
-      return tokens.every(token => target.indexOf(token) !== -1);
-    });
-    // factlet.contentMarkdown.toLocaleLowerCase().indexOf(filterBy) !== -1);
-  }
-
-  // This needs to be called on data load, whenever a factlet is added or modified
-  performSort(factlets: Factlet[]): Factlet[] {
-    return factlets.sort((left, right) => {
-      const leftVal = left.contentMarkdown;
-      const rightVal = right.contentMarkdown;
-
-      if (leftVal > rightVal) {
-        return 1;
-      }
-
-      if (leftVal < rightVal) {
-        return -1;
-      }
-
-      return 0;
-    });
+    // Make sure there's some content
+    if (!control.value.match(/^\d{4}-\d{2}-\d{2} .+/)) {
+      return { valueRequired: true };
+    }
   }
 }

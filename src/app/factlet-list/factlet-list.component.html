@@ -1,17 +1,33 @@
 <!-- <input [(ngModel)]="listFilter" placeholder="search"> -->
 <!-- <input type="text" #box (keyup.enter)="setFilter(box.value); box.value=''" placeholder="search"> -->
-<input type="text" #box (keyup)="listFilter = box.value" placeholder="search">
-
-<button (click)="listFilter = ''; box.value = ''">clear</button>
 <div>
-  <input #contentInput value="getDateStr();" />
-  <button (click)="addFactlet(contentInput.value); contentInput.value='getDateStr();'">
-    add
-  </button>
+  <input type="text" #box (keyup)="listFilter = box.value" placeholder="search" autofocus>
+  <button (click)="listFilter = ''; box.value = ''">x</button>
 </div>
 
-<ul>
-  <li *ngFor="let factlet of displayedFactlets">
-    {{factlet.contentMarkdown}}
-  </li>
-</ul>
+<!-- <div>
+  <input id='newInput' #contentInput (keyup.enter)="addFactlet(contentInput.value); contentInput.value=getDateStr();" />
+  <button (click)="addFactlet(contentInput.value); contentInput.value=getDateStr();">
+    add
+  </button>
+</div> -->
+
+<form [formGroup]="addFactletForm" (ngSubmit)="addFactlet(newFactletControl.value)" [class.error]="!addFactletForm.valid && addFactletForm.touched">
+  <input type="text" [formControl]="newFactletControl">
+  <button type="submit" [disabled]="!newFactletControl.valid">Add</button>
+
+  <ul *ngIf="!addFactletForm.valid">
+    <li *ngIf="newFactletControl.hasError('required')">factlet is required</li>
+    <li *ngIf="newFactletControl.hasError('dateRequired')">factlet must start with yyyy-MM-dd</li>
+  </ul>
+</form>
+
+<table>
+  <tr *ngFor="let factlet of displayedFactlets">
+    <td>
+      <!-- {{factlet.contentMarkdown}} -->
+      <!-- <input type="text" value='25' *ngIf='selected'> -->
+      <app-factlet [factlet]="factlet"></app-factlet>
+    </td>
+  </tr>
+</table>

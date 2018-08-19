@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Factlet } from './factlet';
+import { Factlet } from './factlet.model';
 
 const factlets: Factlet[] = [
   { id: 1, contentMarkdown: '2015-01-01 note 1 ((dave)) ((test)) ((rent))' },

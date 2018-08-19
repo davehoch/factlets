@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Factlet } from '../factlet.model';
 
 @Component({
   selector: 'app-factlet',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./factlet.component.css']
 })
 export class FactletComponent implements OnInit {
+  @Input() factlet: Factlet;
 
   constructor() { }
 

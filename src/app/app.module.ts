@@ -1,22 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FactletComponent } from './factlet/factlet.component';
 import { FactletListComponent } from './factlet-list/factlet-list.component';
-import { FactletSearchComponent } from './factlet-search/factlet-search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FactletComponent,
-    FactletListComponent,
-    FactletSearchComponent
+    FactletListComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
