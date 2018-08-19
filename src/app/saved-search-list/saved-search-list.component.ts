@@ -25,7 +25,6 @@ export class SavedSearchListComponent implements OnInit {
       'searchNameControl': ['', Validators.compose([Validators.required, this.searchNameValidator])]
     });
     this.searchNameControl = this.addSavedSearchForm.controls['searchNameControl'];
-
   }
 
   ngOnInit() {
@@ -48,14 +47,9 @@ export class SavedSearchListComponent implements OnInit {
   }
 
   searchNameValidator(control: FormControl): { [s: string]: boolean } {
-    // Make sure it starts with a date
-    // if (!control.value.match(/^\d{4}-\d{2}-\d{2}/)) {
-    //   return { dateRequired: true };
-    // }
-
-    // // Make sure there's some content
-    // if (!control.value.match(/^\d{4}-\d{2}-\d{2} .+/)) {
-    //   return { valueRequired: true };
+    // Make sure there aren't any duplicates
+    // if (this.savedSearches.find(savedSearch => savedSearch.name === control.value)) {
+    //   return { duplicateName: true };
     // }
 
     if (false) {
