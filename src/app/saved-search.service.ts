@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { SavedSearch } from './savedSearch.model';
 
-const savedSearchs: SavedSearch[] = [
+const savedSearches: SavedSearch[] = [
   { id: 1, name: 'rent', searchString: '((rent))' },
   { id: 2, name: 'daveRent', searchString: '((rent)) ((dave))' },
 ];
@@ -15,7 +15,7 @@ export class SavedSearchService {
   constructor() { }
 
   getSavedSearches(): Observable<SavedSearch[]> {
-    return of(savedSearchs);
+    return of(savedSearches);
   }
 
   addSavedSearch(name: string, searchString: string): Observable<SavedSearch> {

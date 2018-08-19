@@ -10,6 +10,8 @@ import {
 import { Factlet } from '../factlet.model';
 import { FactletService } from '../factlet.service';
 import { FactletUtilsService } from '../factlet-utils.service';
+import { SearchValueService } from '../search-value.service';
+
 
 @Component({
   selector: 'app-factlet-list',
@@ -25,7 +27,9 @@ export class FactletListComponent implements OnInit {
   addFactletForm: FormGroup;
   newFactletControl: AbstractControl;
 
-  constructor(private factletService: FactletService, fb: FormBuilder) {
+  constructor(private factletService: FactletService,
+    private fb: FormBuilder,
+    private searchValueService: SearchValueService) {
     this.addFactletForm = fb.group({
       'newFactletControl': [this.getDateStr(), Validators.compose([Validators.required, this.factletValidator])]
     });
@@ -65,6 +69,9 @@ export class FactletListComponent implements OnInit {
   set listFilter(value: string) {
     this.searchFilter = value;
     this.updateFactlets();
+
+    // When the search changes, publish the change to a place that other components can listen to
+    this.searchValueService.searchInputChanged(value);
   }
 
   // This method should be called to recalculate displayedFactlets whenever there is

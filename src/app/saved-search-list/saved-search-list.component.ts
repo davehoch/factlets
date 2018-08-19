@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { SavedSearchService } from '../saved-search.service';
 import { SavedSearch } from '../savedSearch.model';
+import { SearchValueService } from '../search-value.service';
 
 @Component({
   selector: 'app-saved-search-list',
@@ -20,7 +21,12 @@ export class SavedSearchListComponent implements OnInit {
   addSavedSearchForm: FormGroup;
   searchNameControl: AbstractControl;
 
-  constructor(private savedSearchService: SavedSearchService, fb: FormBuilder) {
+  currentSearchString: string;
+
+  constructor(private savedSearchService: SavedSearchService,
+    private fb: FormBuilder,
+    private searchValueService: SearchValueService
+  ) {
     this.addSavedSearchForm = fb.group({
       'searchNameControl': ['', Validators.compose([Validators.required, this.searchNameValidator])]
     });
@@ -29,6 +35,10 @@ export class SavedSearchListComponent implements OnInit {
 
   ngOnInit() {
     this.getSavedSearches();
+    this.searchValueService.searchInputChanged$.subscribe(value => {
+      this.currentSearchString = value;
+      console.log('change:' + this.currentSearchString);
+    });
   }
 
   getSavedSearches(): void {
@@ -39,7 +49,7 @@ export class SavedSearchListComponent implements OnInit {
   }
 
   addSavedSearch(name: string): void {
-    this.savedSearchService.addSavedSearch(name, 'fake search').subscribe(savedSearch => {
+    this.savedSearchService.addSavedSearch(name, this.currentSearchString).subscribe(savedSearch => {
       this.savedSearches.push(savedSearch);
     });
 
@@ -50,6 +60,10 @@ export class SavedSearchListComponent implements OnInit {
     // Make sure there aren't any duplicates
     // if (this.savedSearches.find(savedSearch => savedSearch.name === control.value)) {
     //   return { duplicateName: true };
+    // }
+
+    // if (!this.currentSearchString || this.currentSearchString === '') {
+    //   return { emptySearchString: true };
     // }
 
     if (false) {

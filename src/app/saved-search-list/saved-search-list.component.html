@@ -9,5 +9,7 @@
 </form>
 
 <ul>
-  <li *ngFor="let savedSearch of savedSearches">{{savedSearch.name}}</li>
+  <li *ngFor="let savedSearch of savedSearches">
+    {{savedSearch.name}} - {{savedSearch.searchString}}
+  </li>
 </ul>
