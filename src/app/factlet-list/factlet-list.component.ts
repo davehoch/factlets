@@ -53,14 +53,17 @@ export class FactletListComponent implements OnInit {
     this.searchValueService.savedSearchChanged$.subscribe(savedSearch => {
       this.searchInputControl.setValue(savedSearch.searchString);
       this.listFilter = savedSearch.searchString;
-    });
+    },
+      err => console.log(err)
+    );
   }
 
   getFactlets(): void {
     this.factletService.getFactlets().subscribe(factlets => {
       this.factlets = factlets;
       this.updateFactlets();
-    } // , error => );
+    },
+      err => console.log(err)
     );
   }
 
@@ -72,7 +75,9 @@ export class FactletListComponent implements OnInit {
     this.factletService.addFactlet(contentMarkdown).subscribe(factlet => {
       this.factlets.push(factlet);
       this.updateFactlets();
-    });
+    },
+      err => console.log(err)
+    );
 
     this.newFactletControl.setValue(this.getDateStr());
   }

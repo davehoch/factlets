@@ -37,20 +37,25 @@ export class SavedSearchListComponent implements OnInit {
     this.getSavedSearches();
     this.searchValueService.searchInputChanged$.subscribe(value => {
       this.currentSearchString = value;
-    });
+    },
+      err => console.log(err)
+    );
   }
 
   getSavedSearches(): void {
     this.savedSearchService.getSavedSearches().subscribe(savedSearches => {
       this.savedSearches = savedSearches;
-    } // , error => );
+    },
+      err => console.log(err)
     );
   }
 
   addSavedSearch(name: string): void {
     this.savedSearchService.addSavedSearch(name, this.currentSearchString).subscribe(savedSearch => {
       this.savedSearches.push(savedSearch);
-    });
+    },
+      err => console.log(err)
+    );
 
     this.searchNameControl.setValue('');
   }
