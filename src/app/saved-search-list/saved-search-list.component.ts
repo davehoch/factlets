@@ -23,12 +23,26 @@ export class SavedSearchListComponent implements OnInit {
 
   currentSearchString: string;
 
+  private static searchNameValidator(control: FormControl): { [s: string]: boolean } {
+    // Make sure there aren't any duplicates
+    // if (this.savedSearches.find(savedSearch => savedSearch.name === control.value)) {
+    //   return { duplicateName: true };
+    // }
+
+    // Make sure there is a search string
+    // if (!this.currentSearchString || this.currentSearchString === '') {
+    //   return { emptySearchString: true };
+    // }
+
+    return {};
+  }
+
   constructor(private savedSearchService: SavedSearchService,
     fb: FormBuilder,
     private searchValueService: SearchValueService
   ) {
     this.addSavedSearchForm = fb.group({
-      'searchNameControl': ['', Validators.compose([Validators.required, this.searchNameValidator])]
+      'searchNameControl': ['', Validators.compose([Validators.required, SavedSearchListComponent.searchNameValidator])]
     });
     this.searchNameControl = this.addSavedSearchForm.controls['searchNameControl'];
   }
@@ -42,7 +56,7 @@ export class SavedSearchListComponent implements OnInit {
     );
   }
 
-  getSavedSearches(): void {
+  private getSavedSearches(): void {
     this.savedSearchService.getSavedSearches().subscribe(savedSearches => {
       this.savedSearches = savedSearches;
     },
@@ -58,22 +72,6 @@ export class SavedSearchListComponent implements OnInit {
     );
 
     this.searchNameControl.setValue('');
-  }
-
-  searchNameValidator(control: FormControl): { [s: string]: boolean } {
-    // Make sure there aren't any duplicates
-    // if (this.savedSearches.find(savedSearch => savedSearch.name === control.value)) {
-    //   return { duplicateName: true };
-    // }
-
-    // Make sure there is a search string
-    // if (!this.currentSearchString || this.currentSearchString === '') {
-    //   return { emptySearchString: true };
-    // }
-
-    if (false) {
-      return { fake: true };
-    }
   }
 
   searchClicked(savedSearch: SavedSearch): void {

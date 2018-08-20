@@ -19,7 +19,7 @@ import { SearchValueService } from '../search-value.service';
 })
 
 export class FactletListComponent implements OnInit {
-  factlets: Factlet[];
+  private factlets: Factlet[];
   displayedFactlets: Factlet[];
   searchFilter: string;
 
@@ -29,12 +29,29 @@ export class FactletListComponent implements OnInit {
   searchForm: FormGroup;
   searchInputControl: AbstractControl;
 
+  private static getDateStr(): string {
+    return (new Date()).toISOString().slice(0, 10) + ' ';
+  }
+
+  private static factletValidator(control: FormControl): { [s: string]: boolean } {
+    // Make sure it starts with a date
+    if (!control.value.match(/^\d{4}-\d{2}-\d{2}/)) {
+      return { dateRequired: true };
+    }
+
+    // Make sure there's some content
+    if (!control.value.match(/^\d{4}-\d{2}-\d{2} .+/)) {
+      return { valueRequired: true };
+    }
+  }
+
   constructor(private factletService: FactletService,
     fb: FormBuilder,
     private searchValueService: SearchValueService) {
 
     this.addFactletForm = fb.group({
-      'newFactletControl': [this.getDateStr(), Validators.compose([Validators.required, this.factletValidator])]
+      'newFactletControl': [FactletListComponent.getDateStr(),
+      Validators.compose([Validators.required, FactletListComponent.factletValidator])]
     });
     this.newFactletControl = this.addFactletForm.controls['newFactletControl'];
 
@@ -58,17 +75,13 @@ export class FactletListComponent implements OnInit {
     );
   }
 
-  getFactlets(): void {
+  private getFactlets(): void {
     this.factletService.getFactlets().subscribe(factlets => {
       this.factlets = factlets;
       this.updateFactlets();
     },
       err => console.log(err)
     );
-  }
-
-  getDateStr(): string {
-    return (new Date()).toISOString().slice(0, 10) + ' ';
   }
 
   addFactlet(contentMarkdown: string): void {
@@ -79,7 +92,7 @@ export class FactletListComponent implements OnInit {
       err => console.log(err)
     );
 
-    this.newFactletControl.setValue(this.getDateStr());
+    this.newFactletControl.setValue(FactletListComponent.getDateStr());
   }
 
   get listFilter(): string {
@@ -98,17 +111,5 @@ export class FactletListComponent implements OnInit {
   // a change to the list, or filters
   updateFactlets(): void {
     this.displayedFactlets = FactletUtilsService.calcDisplayedFactlets(this.factlets, this.searchFilter);
-  }
-
-  factletValidator(control: FormControl): { [s: string]: boolean } {
-    // Make sure it starts with a date
-    if (!control.value.match(/^\d{4}-\d{2}-\d{2}/)) {
-      return { dateRequired: true };
-    }
-
-    // Make sure there's some content
-    if (!control.value.match(/^\d{4}-\d{2}-\d{2} .+/)) {
-      return { valueRequired: true };
-    }
   }
 }
