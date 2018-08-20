@@ -30,7 +30,7 @@ export class FactletListComponent implements OnInit {
   searchInputControl: AbstractControl;
 
   constructor(private factletService: FactletService,
-    private fb: FormBuilder,
+    fb: FormBuilder,
     private searchValueService: SearchValueService) {
 
     this.addFactletForm = fb.group({

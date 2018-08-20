@@ -8,6 +8,7 @@ import { FactletComponent } from './factlet/factlet.component';
 import { FactletListComponent } from './factlet-list/factlet-list.component';
 import { SavedSearchComponent } from './saved-search/saved-search.component';
 import { SavedSearchListComponent } from './saved-search-list/saved-search-list.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { SavedSearchListComponent } from './saved-search-list/saved-search-list.
     FactletComponent,
     FactletListComponent,
     SavedSearchComponent,
-    SavedSearchListComponent
+    SavedSearchListComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,

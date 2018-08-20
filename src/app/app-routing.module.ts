@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { FactletListComponent } from './factlet-list/factlet-list.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/factletList', pathMatch: 'full' },
-  { path: 'factletList', component: FactletListComponent },
+  { path: '', redirectTo: '/mainPage', pathMatch: 'full' },
+  { path: 'mainPage', component: MainPageComponent },
 ];
 
 @NgModule({

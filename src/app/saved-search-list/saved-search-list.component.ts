@@ -24,7 +24,7 @@ export class SavedSearchListComponent implements OnInit {
   currentSearchString: string;
 
   constructor(private savedSearchService: SavedSearchService,
-    private fb: FormBuilder,
+    fb: FormBuilder,
     private searchValueService: SearchValueService
   ) {
     this.addSavedSearchForm = fb.group({
