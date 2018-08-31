@@ -33,8 +33,6 @@ export class FactletListComponent implements OnInit {
     return (new Date()).toISOString().slice(0, 10) + ' ';
   }
 
-  // TODO replace this with Validators.pattern('[a-zA-Z ]*')
-
   private static factletValidator(control: FormControl): { [s: string]: boolean } {
     // Make sure it starts with a date
     if (!control.value.match(/^\d{4}-\d{2}-\d{2}/)) {
