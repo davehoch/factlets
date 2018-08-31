@@ -6,9 +6,8 @@ import {
   Validators,
   AbstractControl
 } from '@angular/forms';
-import { SavedSearchService } from '../saved-search.service';
 import { SavedSearch } from '../savedSearch.model';
-import { SearchValueService } from '../search-value.service';
+import { SavedSearchService } from '../saved-search.service';
 
 @Component({
   selector: 'app-saved-search-list',
@@ -17,11 +16,6 @@ import { SearchValueService } from '../search-value.service';
 })
 export class SavedSearchListComponent implements OnInit {
   savedSearches: SavedSearch[];
-
-  addSavedSearchForm: FormGroup;
-  searchNameControl: AbstractControl;
-
-  currentSearchString: string;
 
   private static searchNameValidator(control: FormControl): { [s: string]: boolean } {
     // Make sure there aren't any duplicates
@@ -34,23 +28,18 @@ export class SavedSearchListComponent implements OnInit {
     //   return { emptySearchString: true };
     // }
 
-    return {};
+    return null;
   }
 
-  constructor(private savedSearchService: SavedSearchService,
-    fb: FormBuilder,
-    private searchValueService: SearchValueService
-  ) {
-    this.addSavedSearchForm = fb.group({
-      'searchNameControl': ['', Validators.compose([Validators.required, SavedSearchListComponent.searchNameValidator])]
-    });
-    this.searchNameControl = this.addSavedSearchForm.controls['searchNameControl'];
+  constructor(private savedSearchService: SavedSearchService) {
   }
 
   ngOnInit() {
     this.getSavedSearches();
-    this.searchValueService.searchInputChanged$.subscribe(value => {
-      this.currentSearchString = value;
+
+    // Whenever the saves searches change, reload them
+    this.savedSearchService.savedSearchesChanged$.subscribe(value => {
+      this.getSavedSearches();
     },
       err => console.log(err)
     );
@@ -64,17 +53,8 @@ export class SavedSearchListComponent implements OnInit {
     );
   }
 
-  addSavedSearch(name: string): void {
-    this.savedSearchService.addSavedSearch(name, this.currentSearchString).subscribe(savedSearch => {
-      this.savedSearches.push(savedSearch);
-    },
-      err => console.log(err)
-    );
-
-    this.searchNameControl.setValue('');
-  }
-
   searchClicked(savedSearch: SavedSearch): void {
-    this.searchValueService.savedSearchChanged(savedSearch);
+    // publish the fact that a saved search was clicked on
+    this.savedSearchService.savedSearchedClicked(savedSearch);
   }
 }

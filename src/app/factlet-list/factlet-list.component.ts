@@ -10,7 +10,7 @@ import {
 import { Factlet } from '../factlet.model';
 import { FactletService } from '../factlet.service';
 import { FactletUtilsService } from '../factlet-utils.service';
-import { SearchValueService } from '../search-value.service';
+import { SavedSearchService } from '../saved-search.service';
 
 @Component({
   selector: 'app-factlet-list',
@@ -33,6 +33,8 @@ export class FactletListComponent implements OnInit {
     return (new Date()).toISOString().slice(0, 10) + ' ';
   }
 
+  // TODO replace this with Validators.pattern('[a-zA-Z ]*')
+
   private static factletValidator(control: FormControl): { [s: string]: boolean } {
     // Make sure it starts with a date
     if (!control.value.match(/^\d{4}-\d{2}-\d{2}/)) {
@@ -45,9 +47,9 @@ export class FactletListComponent implements OnInit {
     }
   }
 
-  constructor(private factletService: FactletService,
-    fb: FormBuilder,
-    private searchValueService: SearchValueService) {
+  constructor(fb: FormBuilder,
+    private factletService: FactletService,
+    private savedSearchService: SavedSearchService) {
 
     this.addFactletForm = fb.group({
       'newFactletControl': [FactletListComponent.getDateStr(),
@@ -67,7 +69,7 @@ export class FactletListComponent implements OnInit {
   ngOnInit() {
     this.searchFilter = '';
     this.getFactlets();
-    this.searchValueService.savedSearchChanged$.subscribe(savedSearch => {
+    this.savedSearchService.savedSearchClicked$.subscribe(savedSearch => {
       this.searchInputControl.setValue(savedSearch.searchString);
       this.listFilter = savedSearch.searchString;
     },
@@ -102,14 +104,19 @@ export class FactletListComponent implements OnInit {
   set listFilter(value: string) {
     this.searchFilter = value;
     this.updateFactlets();
-
-    // When the search changes, publish the change to a place that other components can listen to
-    this.searchValueService.searchInputChanged(value);
   }
 
   // This method should be called to recalculate displayedFactlets whenever there is
   // a change to the list, or filters
   updateFactlets(): void {
     this.displayedFactlets = FactletUtilsService.calcDisplayedFactlets(this.factlets, this.searchFilter);
+  }
+
+  saveCurrentSearch(): void {
+    const searchName = window.prompt('Name the search');
+
+    if (searchName) {
+      this.savedSearchService.addSavedSearch(searchName, this.searchFilter);
+    }
   }
 }

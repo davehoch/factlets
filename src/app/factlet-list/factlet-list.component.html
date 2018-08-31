@@ -4,6 +4,7 @@
   <!-- <input type="text" #box (keyup)="listFilter = box.value" placeholder="search" autofocus> -->
   <input type="text" [formControl]="searchInputControl" #box (keyup)="listFilter = box.value" placeholder="search" autofocus>
   <button (click)="listFilter = ''; box.value = ''">x</button>
+  <button (click)="saveCurrentSearch()" [disabled]="!searchFilter">Save Search</button>
 </form>
 
 <!-- <div>
