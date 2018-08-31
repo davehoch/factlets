@@ -1,18 +1,9 @@
 <!-- <input [(ngModel)]="listFilter" placeholder="search"> -->
-<!-- <input type="text" #box (keyup.enter)="setFilter(box.value); box.value=''" placeholder="search"> -->
 <form [formGroup]="searchForm">
-  <!-- <input type="text" #box (keyup)="listFilter = box.value" placeholder="search" autofocus> -->
   <input type="text" [formControl]="searchInputControl" #box (keyup)="listFilter = box.value" placeholder="search" autofocus>
   <button (click)="listFilter = ''; box.value = ''">x</button>
   <button (click)="saveCurrentSearch()" [disabled]="!searchFilter">Save Search</button>
 </form>
-
-<!-- <div>
-  <input id='newInput' #contentInput (keyup.enter)="addFactlet(contentInput.value); contentInput.value=getDateStr();" />
-  <button (click)="addFactlet(contentInput.value); contentInput.value=getDateStr();">
-    add
-  </button>
-</div> -->
 
 <form [formGroup]="addFactletForm" (ngSubmit)="addFactlet(newFactletControl.value)" [class.error]="!addFactletForm.valid && addFactletForm.touched">
   <input type="text" [formControl]="newFactletControl">
